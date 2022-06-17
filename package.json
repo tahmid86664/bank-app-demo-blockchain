@@ -1,0 +1,17 @@
+{
+  "name": "bank-app-demo",
+  "version": "1.0.0",
+  "description": "a banking app demonstration of using blockchain in banking sector [thesis topic demonstration]",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemone index.js"
+  },
+  "author": "Tahmid Khandokar",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongoose": "^6.3.8"
+  }
+}
