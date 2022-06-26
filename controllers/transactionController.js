@@ -4,6 +4,66 @@ const { Transaction3 } = require("../db/db3");
 
 const Block = require("../blockchain/Block");
 
+const getUserByAcc = async (req, res) => {
+  const branch = req.params.branch;
+  const acc = req.params.acc;
+  try {
+    if (branch === "1") {
+      const transactions = await Transaction.findOne({ acc: acc });
+      res
+        .status(200)
+        .json({ msg: `from branch ${branch}`, data: transactions });
+    } else if (branch === "2") {
+      const transactions2 = await Transaction2.findOne({ acc: acc });
+      res
+        .status(200)
+        .json({ msg: `from branch ${branch}`, data: transactions2 });
+    } else if (branch === "3") {
+      const transactions3 = await Transaction3.findOne({ acc: acc });
+      res
+        .status(200)
+        .json({ msg: `from branch ${branch}`, data: transactions3 });
+    } else {
+      return;
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+const getAccountBalace = async (req, res) => {
+  const branch = req.params.branch;
+  const acc = req.params.acc;
+
+  try {
+    if (branch === "1") {
+      const transactions = await Transaction.findOne({ acc: acc });
+      res
+        .status(200)
+        .json({ msg: `from branch ${branch}`, data: transactions.balance });
+    } else if (branch === "2") {
+      const transactions2 = await Transaction2.findOne({ acc: acc });
+      res
+        .status(200)
+        .json({ msg: `from branch ${branch}`, data: transactions2.balance });
+    } else if (branch === "3") {
+      const transactions3 = await Transaction3.findOne({ acc: acc });
+      res
+        .status(200)
+        .json({ msg: `from branch ${branch}`, data: transactions3.balance });
+    } else {
+      return;
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+////
+////
+////
+////
+
 const getAllTransactions = async (req, res) => {
   try {
     const transactions = await Transaction.find();
@@ -133,4 +193,9 @@ module.exports = {
   getTransactionInfoById,
   getAllTransactionsOfOneUser,
   createTransaction,
+  //
+  //
+  //
+  getUserByAcc,
+  getAccountBalace,
 };
