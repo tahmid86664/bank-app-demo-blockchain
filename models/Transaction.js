@@ -13,6 +13,12 @@ const transactionSchema = mongoose.Schema(
     userNID: {
       type: String,
       required: true,
+      unique: true,
+    },
+    acc: {
+      type: String,
+      required: true,
+      unique: true,
     },
     transactions: [
       {
@@ -37,6 +43,7 @@ const transactionSchema = mongoose.Schema(
           depositorWithdrawer: {
             name: {
               type: String,
+              lowercase: true,
             },
             NID: {
               type: String,
@@ -63,4 +70,5 @@ const transactionSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Transaction", transactionSchema);
+// module.exports = mongoose.model("Transaction", transactionSchema);
+module.exports = transactionSchema;

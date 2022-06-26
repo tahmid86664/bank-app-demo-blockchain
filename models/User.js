@@ -4,13 +4,20 @@ const userSchema = mongoose.Schema(
   {
     firstName: {
       type: String,
+      lowercase: true,
       required: true,
     },
     lastName: {
       type: String,
+      lowercase: true,
       required: true,
     },
     NID: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    acc: {
       type: String,
       required: true,
       unique: true,
@@ -35,10 +42,12 @@ const userSchema = mongoose.Schema(
     },
     presentAddress: {
       type: String,
+      lowercase: true,
       max: 100,
     },
     permanentAddress: {
       type: String,
+      lowercase: true,
       max: 100,
     },
     nomini: {
@@ -46,10 +55,12 @@ const userSchema = mongoose.Schema(
       required: true,
       firstName: {
         type: String,
+        lowercase: true,
         required: true,
       },
       lastName: {
         type: String,
+        lowercase: true,
         required: true,
       },
       NID: {
@@ -66,6 +77,7 @@ const userSchema = mongoose.Schema(
       },
       relationship: {
         type: String,
+        lowercase: true,
         required: true,
       },
     },
@@ -76,4 +88,7 @@ const userSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("User", userSchema);
+// const test = mongoose.connection.useDb("test");
+
+// module.exports = test.model("User", userSchema);
+module.exports = userSchema;
