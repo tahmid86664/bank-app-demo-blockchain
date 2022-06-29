@@ -59,6 +59,103 @@ const getAccountBalace = async (req, res) => {
   }
 };
 
+const getLastTransaction = async (req, res) => {
+  try {
+    const t = req.body;
+    // console.log(t);
+    const transaction = await Transaction.findOne({
+      $or: [{ acc: t.acc }, { userNID: t.userNID }],
+    });
+    const lastTransaction =
+      transaction.transactions[transaction.transactions.length - 1];
+
+    const index = lastTransaction.index;
+    const prevHash = lastTransaction.hash;
+    console.log(t);
+    res.status(200).json({ index, prevHash });
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+const createTransactionByBranch = async (req, res) => {
+  try {
+    const t = req.body;
+    const branch = req.params.branch;
+    console.log(`creating from branch ${branch}`);
+
+    // ekhane transaction gulo find out kora individual howa laagbe
+    // apadoto rakha r ki
+    // const transaction = await Transaction.findOne({
+    //   $or: [{ acc: t.acc }, { userNID: t.userNID }],
+    // });
+    // const lastTransaction =
+    //   transaction.transactions[transaction.transactions.length - 1];
+
+    // const index = lastTransaction.index + 1;
+    const index = +t.index;
+    const data = {
+      amount: +t.amount, // + sign is for converting into number
+      transactionType: t.transactionType,
+      otp: t.otp,
+      branch: t.branch,
+    };
+    const prevHash = t.prevHash;
+    const timestamp = t.timestamp;
+
+    if (branch === "1") {
+      await Transaction.findOneAndUpdate({
+        acc: t.acc,
+      }).exec(async (err, doc) => {
+        if (err) {
+          console.log(err);
+          return;
+        } else {
+          const { docum, dataset } = transactionAddingFunction(doc, data);
+          // console.log({ docum, dataset });
+          const newBlock = new Block(index, timestamp, dataset, prevHash);
+          docum.transactions.push(newBlock);
+          await docum.save();
+          const result = await docum.save();
+          res.status(201).send(result.transactions);
+        }
+      });
+    } else if (branch === "2") {
+      await Transaction2.findOneAndUpdate({
+        acc: t.acc,
+      }).exec(async (err, doc) => {
+        if (err) {
+          console.log(err);
+          return;
+        } else {
+          const { docum, dataset } = transactionAddingFunction(doc, data);
+          // console.log({ docum, dataset });
+          const newBlock = new Block(index, timestamp, dataset, prevHash);
+          docum.transactions.push(newBlock);
+          const result = await docum.save();
+          res.status(201).send(result.transactions);
+        }
+      });
+    } else if (branch === "3") {
+      await Transaction3.findOneAndUpdate({
+        acc: t.acc,
+      }).exec(async (err, doc) => {
+        if (err) {
+          console.log(err);
+          return;
+        } else {
+          const { docum, dataset } = transactionAddingFunction(doc, data);
+          // console.log({ docum, dataset });
+          const newBlock = new Block(index, timestamp, dataset, prevHash);
+          docum.transactions.push(newBlock);
+          const result = await docum.save();
+          res.status(201).send(result.transactions);
+        }
+      });
+    }
+  } catch (err) {}
+};
+
 ////
 ////
 ////
@@ -198,4 +295,6 @@ module.exports = {
   //
   getUserByAcc,
   getAccountBalace,
+  createTransactionByBranch,
+  getLastTransaction,
 };

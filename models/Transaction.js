@@ -52,6 +52,14 @@ const transactionSchema = mongoose.Schema(
               type: String,
             },
           },
+          otp: {
+            type: String,
+            required: true,
+          },
+          branch: {
+            type: String,
+            required: true,
+          },
         },
         previousHash: {
           type: String,
