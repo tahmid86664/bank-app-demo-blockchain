@@ -94,17 +94,23 @@ const createTransactionByBranch = async (req, res) => {
 
     // const index = lastTransaction.index + 1;
     const index = +t.index;
+
     const data = {
       amount: +t.amount, // + sign is for converting into number
       transactionType: t.transactionType,
       otp: t.otp,
       branch: t.branch,
     };
+    if (t.transactionType === "cwo") {
+      data["otherName"] = t.name;
+      data["otherNID"] = t.withdrawerNid;
+      data["otherMobile"] = t.mobile;
+    }
     const prevHash = t.prevHash;
     const timestamp = t.timestamp;
 
     if (branch === "1") {
-      await Transaction.findOneAndUpdate({
+      await Transaction.findOne({
         acc: t.acc,
       }).exec(async (err, doc) => {
         if (err) {
@@ -121,7 +127,7 @@ const createTransactionByBranch = async (req, res) => {
         }
       });
     } else if (branch === "2") {
-      await Transaction2.findOneAndUpdate({
+      await Transaction2.findOne({
         acc: t.acc,
       }).exec(async (err, doc) => {
         if (err) {
@@ -137,7 +143,7 @@ const createTransactionByBranch = async (req, res) => {
         }
       });
     } else if (branch === "3") {
-      await Transaction3.findOneAndUpdate({
+      await Transaction3.findOne({
         acc: t.acc,
       }).exec(async (err, doc) => {
         if (err) {
@@ -265,17 +271,17 @@ const transactionAddingFunction = (doc, data) => {
     // cdo -> cash deposit by others
     doc.balance = doc.balance + data.amount;
     data.depositorWithdrawer = {
-      name: t.otherName,
-      NID: t.otherNID,
-      mobile: t.otherMobile,
+      name: data.otherName,
+      NID: data.otherNID,
+      mobile: data.otherMobile,
     };
   } else if (data.transactionType === "cwo") {
     // cwo -> cash withdraw by others
     doc.balance = doc.balance - data.amount;
     data.depositorWithdrawer = {
-      name: t.otherName,
-      NID: t.otherNID,
-      mobile: t.otherMobile,
+      name: data.otherName,
+      NID: data.otherNID,
+      mobile: data.otherMobile,
     };
   }
 

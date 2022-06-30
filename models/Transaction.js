@@ -13,12 +13,10 @@ const transactionSchema = mongoose.Schema(
     userNID: {
       type: String,
       required: true,
-      unique: true,
     },
     acc: {
       type: String,
       required: true,
-      unique: true,
     },
     transactions: [
       {
