@@ -12,7 +12,11 @@ const port = process.env.PORT || 9000;
 
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: [
+      "http://localhost:3000",
+      "https://bc-bank-app-demo.netlify.app",
+      "bc-bank-app-demo.netlify.app",
+    ],
   })
 );
 app.use(express.json());
